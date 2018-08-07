@@ -1,7 +1,9 @@
-# Munki defaults - main.yml
---- 
-munki_mount_options: 
+# Mount defaults - main.yml
+---
+mount_options: 
 
-munki_mount_username:
+mount_password:
 
-munki_mount_password:
+mount_state: mounted
+
+mount_username:
