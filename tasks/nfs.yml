@@ -1,0 +1,16 @@
+# Mount tasks - nfs.yml
+---
+- name: install required packages - mount (nfs)
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - nfs-common
+
+- name: mount share (nfs)
+  mount:
+    path: "{{ mount_path }}"
+    src: "{{ munki_repo_share }}"
+    fstype: nfs
+    opts: "{{ mount_options }}"
+    state: "{{ mount_state }}"

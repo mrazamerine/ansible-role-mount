@@ -1,21 +1,5 @@
 # Mount tasks - main.yml
 ---
-- name: install required packages - mount (cifs)
-  apt:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - cifs-utils
-  when: mount_fstype == "cifs" or mount_fstype == "smb"
-
-- name: install required packages - mount (nfs)
-  apt:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - nfs-common
-  when: mount_fstype == "nfs"
-
 - name: create mount credentials folder
   file:
     dest: /root/.mount_credentials
@@ -30,22 +14,12 @@
     group: root
     mode: 0600
 
-- name: mount share (cifs)
-  mount:
-    path: "{{ mount_path }}"
-    src: "{{ mount_share }}"
-    fstype: cifs
-    opts: "credentials=/root/.mount_credentials/{{ mount_name }}_mount_credentials,{{ mount_options }}"
-    state: "{{ mount_state }}"
+- name: run smb/cifs tasks
+  include_tasks: smb.yml
   when: mount_fstype == "cifs" or mount_fstype == "smb"
 
-- name: mount share (nfs)
-  mount:
-    path: "{{ mount_path }}"
-    src: "{{ mount_share }}"
-    fstype: nfs
-    opts: "{{ mount_options }}"
-    state: "{{ mount_state }}"
+- name: run nfs tasks
+  include_tasks: smb.yml
   when: mount_fstype == "nfs"
 
 - name: mount share (other)

@@ -1,0 +1,16 @@
+# Mount tasks - smb.yml
+---
+- name: install required packages - mount (smb/cifs)
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - cifs-utils
+
+- name: mount share (smb/cifs)
+  mount:
+    path: "{{ mount_path }}"
+    src: "{{ munki_repo_share }}"
+    fstype: cifs
+    opts: "credentials=/root/.munki_mount_credentials,{{ mount_options }}"
+    state: "{{ mount_state }}"
