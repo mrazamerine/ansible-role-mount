@@ -1,19 +1,5 @@
 # Mount tasks - main.yml
 ---
-- name: create mount credentials folder
-  file:
-    dest: /root/.mount_credentials
-    owner: root
-    group: root
-
-- name: create mount credentials
-  template:
-    src: mount_credentials.j2
-    dest: "/root/.mount_credentials/{{ mount_name }}_mount_credentials"
-    owner: root
-    group: root
-    mode: 0600
-
 - name: run smb/cifs tasks
   include_tasks: smb.yml
   when: mount_fstype == "cifs" or mount_fstype == "smb"

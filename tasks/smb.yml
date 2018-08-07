@@ -1,5 +1,19 @@
 # Mount tasks - smb.yml
 ---
+- name: create mount credentials folder
+  file:
+    dest: /root/.mount_credentials
+    owner: root
+    group: root
+
+- name: create mount credentials
+  template:
+    src: mount_credentials.j2
+    dest: "/root/.mount_credentials/{{ mount_name }}_mount_credentials"
+    owner: root
+    group: root
+    mode: 0600
+
 - name: install required packages - mount (smb/cifs)
   apt:
     name: "{{ item }}"
@@ -10,7 +24,7 @@
 - name: mount share (smb/cifs)
   mount:
     path: "{{ mount_path }}"
-    src: "{{ munki_repo_share }}"
+    src: "{{ mount_share }}"
     fstype: cifs
-    opts: "credentials=/root/.munki_mount_credentials,{{ mount_options }}"
+    opts: "credentials=/root/.mount_credentials/{{ mount_name }}_mount_credentials,{{ mount_options }}"
     state: "{{ mount_state }}"
