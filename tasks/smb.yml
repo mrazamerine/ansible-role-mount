@@ -5,6 +5,7 @@
     dest: /root/.mount_credentials
     owner: root
     group: root
+    state: directory
 
 - name: create mount credentials
   template:
